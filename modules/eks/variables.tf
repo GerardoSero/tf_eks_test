@@ -6,3 +6,7 @@ variable "cluster_name" {
   type    = string
   default = "terraform-eks-demo"
 }
+
+variable "cluster_version" {
+  type = string
+}

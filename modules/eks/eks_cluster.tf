@@ -64,7 +64,7 @@ resource "aws_security_group_rule" "eks_cluster_sg_ingress_workstation_https_gr"
 resource "aws_eks_cluster" "eks_cluster" {
   name                      = var.cluster_name
   role_arn                  = aws_iam_role.eks_cluster_role.arn
-  version                   = "1.16"
+  version                   = var.cluster_version
   enabled_cluster_log_types = ["api", "controllerManager", "scheduler"]
 
   vpc_config {
@@ -81,4 +81,16 @@ resource "aws_eks_cluster" "eks_cluster" {
     aws_iam_role_policy_attachment.eks_cluster_role_AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks_cluster_role_AmazonEKSServicePolicy,
   ]
+}
+
+# Register EKS's OIDC Provider
+
+data "tls_certificate" "eks_cluster_oidc_tls" {
+  url = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks_cluster_oidc_provider" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.eks_cluster_oidc_tls.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }

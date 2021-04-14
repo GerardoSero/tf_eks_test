@@ -1,65 +1,45 @@
-terraform {
-  required_version = ">=0.12.0"
-  # backend "s3" {
-  #   region  = "us-east-1"
-  #   profile = "default"
-  #   key     = "terraform_state_file"
-  #   bucket  = "terraformstatebucket995551235"
-  # }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.22.0"
-    }
-    tls = {
-      source  = "hashicorp/tls"
-      version = "3.1.0"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = ">= 2.0.3"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = ">= 2.1.0"
-    }
-  }
-}
-
-provider "aws" {
-  profile = var.profile
-  region  = var.aws_region
-}
-
-provider "tls" {
-}
-
-provider "kubernetes" {
-  host                   = module.eks.cluster.endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster.certificate_authority[0].data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
-    args        = ["--profile", var.profile, "--region", var.aws_region, "eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = module.eks.cluster.endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster.certificate_authority[0].data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1alpha1"
-      args        = ["--profile", var.profile, "--region", var.aws_region, "eks", "get-token", "--cluster-name", var.cluster_name]
-      command     = "aws"
-    }
-  }
-}
-
 module "eks" {
-  source       = "./modules/eks"
-  cluster_name = var.cluster_name
+  source            = "./modules/eks"
+  cluster_name      = var.cluster_name
+  cluster_version   = "1.16"
+  admin_access_cidr = var.admin_access_cidr
+}
+
+resource "aws_key_pair" "ec2_key" {
+  key_name   = "ec2-key"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
+
+resource "aws_security_group_rule" "eks_node_sg-workstation-ssh" {
+  description       = "Allow workstation to communicate with the nodes"
+  security_group_id = module.eks.nodes_sg.id
+  cidr_blocks       = [var.admin_access_cidr]
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  type              = "ingress"
+}
+
+locals {
+  nodes = {
+    node-group-116 = "1.16"
+    #node-group-117 = "1.17"
+  }
+}
+
+module "eks_node_groups" {
+  for_each = local.nodes
+
+  source                 = "./modules/eks_node_group"
+  name                   = each.key
+  subnet_ids             = module.eks.subnet_ids
+  cluster_name           = module.eks.cluster.id
+  cluster_ca             = module.eks.cluster.certificate_authority[0].data
+  cluster_endpoint       = module.eks.cluster.endpoint
+  node_role_arn          = module.eks.node_role_arn
+  node_key_name          = aws_key_pair.ec2_key.key_name
+  node_security_group_id = module.eks.nodes_sg.id
+  node_ami_version       = each.value
 }
 
 module "k8s" {
