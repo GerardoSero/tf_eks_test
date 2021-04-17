@@ -1,0 +1,72 @@
+# Specify Kong proxy service configuration
+proxy:
+  # Enable creating a Kubernetes service for the proxy
+  enabled: true
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  # To specify annotations or labels for the proxy service, add them to the respective
+  # "annotations" or "labels" dictionaries below.
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+
+# Kong Ingress Controller's primary purpose is to satisfy Ingress resources
+# created in k8s.  It uses CRDs for more fine grained control over routing and
+# for Kong specific configuration.
+ingressController:
+  enabled: true    
+  resources:
+    limits:
+      cpu: "10m"
+      memory: "50Mi"
+    requests:
+      cpu: "5m"
+      memory: "10Mi"
+
+podAnnotations:
+  prometheus.io/scrape: "true" # Ask Prometheus to scrape the
+  prometheus.io/port: "8001"   # Kong pods for metrics
+
+resources:
+  limits:
+   cpu: "500m"
+   memory: "500Mi"
+  requests:
+   cpu: "500m"
+   memory: "256Mi"
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - "kong-ingress"
+        topologyKey: "kubernetes.io/hostname"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  ## Otherwise for clusters that do support autoscaling/v2beta, use metrics
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80   
+
+# Specify Kong admin API service and listener configuration
+admin:
+  # Enable creating a Kubernetes service for the admin API
+  # Disabling this is recommended for most ingress controller configurations
+  # Enterprise users that wish to use Kong Manager with the controller should enable this
+  enabled: true
+  http:
+    enabled: true

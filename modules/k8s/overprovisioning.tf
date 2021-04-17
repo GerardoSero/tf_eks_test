@@ -128,7 +128,7 @@ resource "kubernetes_config_map" "overprovisioning_config" {
   # replicas = max( ceil( cores * 1/coresPerReplica ) , ceil( nodes * 1/nodesPerReplica ) )
   data = {
     "linear" = jsonencode({
-      "coresPerReplica" : 2,
+      "coresPerReplica" : 1,
       "nodesPerReplica" : 1,
       "min" : 1,
       "max" : 100,

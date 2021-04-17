@@ -46,4 +46,8 @@ module "k8s" {
   source              = "./modules/k8s"
   cluster_id          = module.eks.cluster.id # creates dependency on cluster creation
   autoscaler_role_arn = module.eks.autoscaler_role_arn
+
+  depends_on = [
+    module.eks_node_groups
+  ]  
 }
