@@ -24,10 +24,6 @@ ingressController:
       cpu: "5m"
       memory: "10Mi"
 
-podAnnotations:
-  prometheus.io/scrape: "true" # Ask Prometheus to scrape the
-  prometheus.io/port: "8001"   # Kong pods for metrics
-
 resources:
   limits:
    cpu: "500m"
