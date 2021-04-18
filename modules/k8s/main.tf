@@ -17,15 +17,6 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
-resource "helm_release" "prometheus_stack" {
-  name       = "prometheus-stack"
-  repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "kube-prometheus-stack"
-  namespace  = kubernetes_namespace.monitoring.metadata.0.name
-
-  values = [file("./helm_values/prometheus_stack.yaml")]
-}
-
 resource "kubernetes_namespace" "ingress" {
   metadata {
     name = "ingress"
