@@ -1,12 +1,8 @@
 # Overprovisioning
 
-resource "kubernetes_namespace" "overprovisioning_namespace" {
-  metadata {
-    name = "overprovisioning"
-  }
-}
-
 resource "kubernetes_priority_class" "overprovisioning_priority_class" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name = "overprovisioning"
   }
@@ -17,9 +13,11 @@ resource "kubernetes_priority_class" "overprovisioning_priority_class" {
 }
 
 resource "kubernetes_service_account" "overprovisioning_account" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name      = "cluster-proportional-autoscaler"
-    namespace = kubernetes_namespace.overprovisioning_namespace.metadata[0].name
+    namespace = kubernetes_namespace.autoscaling_namespace.metadata[0].name
   }
 
   lifecycle {
@@ -28,6 +26,8 @@ resource "kubernetes_service_account" "overprovisioning_account" {
 }
 
 resource "kubernetes_cluster_role" "overprovisioning_cluster_role" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name = "cluster-proportional-autoscaler"
   }
@@ -58,6 +58,8 @@ resource "kubernetes_cluster_role" "overprovisioning_cluster_role" {
 }
 
 resource "kubernetes_cluster_role_binding" "overprovisioning_cluster_role_binding" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name = "cluster-proportional-autoscaler"
   }
@@ -65,20 +67,22 @@ resource "kubernetes_cluster_role_binding" "overprovisioning_cluster_role_bindin
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.overprovisioning_cluster_role.metadata[0].name
+    name      = kubernetes_cluster_role.overprovisioning_cluster_role[0].metadata[0].name
   }
 
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.overprovisioning_account.metadata[0].name
-    namespace = kubernetes_service_account.overprovisioning_account.metadata[0].namespace
+    name      = kubernetes_service_account.overprovisioning_account[0].metadata[0].name
+    namespace = kubernetes_service_account.overprovisioning_account[0].metadata[0].namespace
   }
 }
 
 resource "kubernetes_deployment" "overprovisioning" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name      = "overprovisioning"
-    namespace = kubernetes_namespace.overprovisioning_namespace.metadata[0].name
+    namespace = kubernetes_namespace.autoscaling_namespace.metadata[0].name
   }
 
   spec {
@@ -98,13 +102,14 @@ resource "kubernetes_deployment" "overprovisioning" {
       }
 
       spec {
-        priority_class_name = kubernetes_priority_class.overprovisioning_priority_class.metadata[0].name
+        priority_class_name = kubernetes_priority_class.overprovisioning_priority_class[0].metadata[0].name
         container {
           name  = "reserve-resources"
           image = "k8s.gcr.io/pause"
           resources {
             requests = {
-              "cpu" = "200m"
+              "cpu"    = var.overprovisioning_resource_request.cpu
+              "memory" = var.overprovisioning_resource_request.memory
             }
           }
         }
@@ -120,9 +125,11 @@ resource "kubernetes_deployment" "overprovisioning" {
 }
 
 resource "kubernetes_config_map" "overprovisioning_config" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name      = "overprovisioning-autoscaler"
-    namespace = kubernetes_namespace.overprovisioning_namespace.metadata[0].name
+    namespace = kubernetes_namespace.autoscaling_namespace.metadata[0].name
   }
 
   # replicas = max( ceil( cores * 1/coresPerReplica ) , ceil( nodes * 1/nodesPerReplica ) )
@@ -139,9 +146,11 @@ resource "kubernetes_config_map" "overprovisioning_config" {
 }
 
 resource "kubernetes_deployment" "overprovisioning_autoscaler" {
+  count = var.overprovisioning != "disabled" ? 1 : 0
+
   metadata {
     name      = "overprovisioning-autoscaler"
-    namespace = kubernetes_namespace.overprovisioning_namespace.metadata[0].name
+    namespace = kubernetes_namespace.autoscaling_namespace.metadata[0].name
     labels = {
       "app" = "overprovisioning-autoscaler"
     }
@@ -164,13 +173,13 @@ resource "kubernetes_deployment" "overprovisioning_autoscaler" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.overprovisioning_account.metadata[0].name
+        service_account_name = kubernetes_service_account.overprovisioning_account[0].metadata[0].name
         container {
           name  = "autoscaler"
           image = "k8s.gcr.io/cluster-proportional-autoscaler-amd64:1.6.0"
           command = [
             "./cluster-proportional-autoscaler",
-            "--namespace=${kubernetes_namespace.overprovisioning_namespace.metadata[0].name}",
+            "--namespace=${kubernetes_namespace.autoscaling_namespace.metadata[0].name}",
             "--configmap=overprovisioning-autoscaler",
             "--default-params={\"linear\":{\"coresPerReplica\":1}}",
             "--target=deployment/overprovisioning",

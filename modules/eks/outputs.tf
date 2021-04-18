@@ -2,10 +2,6 @@ output "cluster" {
   value = aws_eks_cluster.eks_cluster
 }
 
-output "autoscaler_role_arn" {
-  value = aws_iam_role.eks_node_autoscaling_aim_role.arn
-}
-
 output "node_role_arn" {
   value = aws_iam_role.eks_node_role.arn
 }
@@ -16,4 +12,12 @@ output "nodes_sg" {
 
 output "subnet_ids" {
   value = aws_subnet.eks_subnet[*].id
+}
+
+output "oidc_provider_url" {
+  value = aws_iam_openid_connect_provider.eks_cluster_oidc_provider.url
+}
+
+output "oidc_provider_arn" {
+  value = aws_iam_openid_connect_provider.eks_cluster_oidc_provider.arn
 }

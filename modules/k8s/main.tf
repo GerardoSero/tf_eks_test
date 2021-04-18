@@ -19,7 +19,6 @@ resource "kubernetes_namespace" "monitoring" {
 
 resource "helm_release" "prometheus_stack" {
   name       = "prometheus-stack"
-  wait       = false
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   namespace  = kubernetes_namespace.monitoring.metadata.0.name
@@ -35,7 +34,6 @@ resource "kubernetes_namespace" "ingress" {
 
 resource "helm_release" "kong_ingress" {
   name       = "kong-ingress"
-  wait       = false
   repository = "https://charts.konghq.com"
   chart      = "kong"
   namespace  = kubernetes_namespace.ingress.metadata.0.name
