@@ -48,6 +48,21 @@ module "eks_autoscaling" {
   cluster_region    = var.aws_region
   oidc_provider_url = module.eks.oidc_provider_url
   oidc_provider_arn = module.eks.oidc_provider_arn
+  overprovisioning  = var.eks_overprovisioning_enabled ? "linear" : "disabled"
+
+  depends_on = [
+    module.eks_node_groups
+  ]
+}
+
+module "eks_cloudwatch" {
+  count = var.eks_cloudwatch_enabled ? 1 : 0
+
+  source            = "./modules/eks_cloudwatch"
+  cluster_name      = module.eks.cluster.id
+  cluster_region    = var.aws_region
+  oidc_provider_url = module.eks.oidc_provider_url
+  oidc_provider_arn = module.eks.oidc_provider_arn
 
   depends_on = [
     module.eks_node_groups

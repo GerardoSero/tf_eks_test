@@ -1,0 +1,5 @@
+fields @timestamp
+| filter kubernetes.container_name = "aws-cluster-autoscaler"
+| parse log "] *" message
+| sort @timestamp desc
+| limit 200

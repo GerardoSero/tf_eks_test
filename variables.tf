@@ -13,6 +13,16 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "eks_cloudwatch_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "eks_overprovisioning_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "admin_access_cidr" {
   type = string
 }
