@@ -153,10 +153,15 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
       }
     }
 
+    replicas = "2" // Needed at least 2 replicas to don't stop HPA 
+
     template {
       metadata {
         labels = {
           k8s-app = "metrics-server"
+        }
+        annotations = {
+          "cluster-autoscaler.kubernetes.io/safe-to-evict" = "true"
         }
       }
 
@@ -220,9 +225,7 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
         service_account_name = "metrics-server"
 
         volume {
-          empty_dir {
-
-          }
+          empty_dir {}
           name = "tmp-dir"
         }
       }
@@ -237,6 +240,26 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
     kubernetes_cluster_role_binding.metrics_server_auth_cluster_role_binding,
     kubernetes_cluster_role_binding.metrics_server_cluster_role_binding
   ]
+}
+
+resource "kubernetes_pod_disruption_budget" "metrics_server_pdb" {
+  metadata {
+    labels = {
+      k8s-app = "metrics-server"
+    }
+    name      = "metrics-server"
+    namespace = "kube-system"
+  }
+
+  spec {
+    selector {
+      match_labels = {
+        k8s-app = "metrics-server"
+      }
+    }
+
+    max_unavailable = "1"
+  }
 }
 
 resource "kubernetes_api_service" "metrics_server_api_service" {
