@@ -215,6 +215,13 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
             mount_path = "/tmp"
             name       = "tmp-dir"
           }
+
+          resources {
+            requests = {
+              "cpu" = "100m"
+              "memory" = "50Mi"
+            }
+          }
         }
 
         node_selector = {
@@ -242,6 +249,7 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
   ]
 }
 
+# Since metrics-server is in kube-system, a PDB is required by cluster-autoscaler
 resource "kubernetes_pod_disruption_budget" "metrics_server_pdb" {
   metadata {
     labels = {

@@ -77,3 +77,9 @@ module "k8s" {
     module.eks_node_groups
   ]
 }
+
+module "k8s_test_services" {
+  count = var.k8s_test_services_enabled ? 1 : 0
+
+  source = "./modules/k8s_test_services"
+}

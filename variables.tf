@@ -23,6 +23,11 @@ variable "eks_overprovisioning_enabled" {
   default = true
 }
 
+variable "k8s_test_services_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "admin_access_cidr" {
   type = string
 }

@@ -114,6 +114,16 @@ resource "helm_release" "cluster_autoscaler" {
     value = aws_iam_role.eks_node_autoscaling_aim_role.arn
   }
 
+  set {
+    name  = "extraArgs.leader-elect"
+    value = "true"
+  }
+
+  set {
+    name  = "extraArgs.unremovable-node-recheck-timeout"
+    value = "1m"
+  }
+
   depends_on = [
     aws_iam_role_policy_attachment.eks_node_autoscaling_aim_role_policy_attach
   ]
