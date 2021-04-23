@@ -69,6 +69,20 @@ module "eks_cloudwatch" {
   ]
 }
 
+module "eks_ingress" {
+  count = var.ingress_type != "none" ? 1 : 0
+
+  source            = "./modules/eks_ingress"
+  cluster_name      = module.eks.cluster.id
+  cluster_region    = var.aws_region
+  oidc_provider_url = module.eks.oidc_provider_url
+  oidc_provider_arn = module.eks.oidc_provider_arn
+
+  depends_on = [
+    module.eks_node_groups
+  ]
+}
+
 module "k8s" {
   source             = "./modules/k8s"
   prometheus_enabled = var.prometheus_enabled
