@@ -218,7 +218,7 @@ resource "kubernetes_deployment" "metrics_server_deployment" {
 
           resources {
             requests = {
-              "cpu" = "100m"
+              "cpu"    = "100m"
               "memory" = "50Mi"
             }
           }

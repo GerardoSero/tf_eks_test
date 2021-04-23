@@ -70,8 +70,9 @@ module "eks_cloudwatch" {
 }
 
 module "k8s" {
-  source     = "./modules/k8s"
-  cluster_id = module.eks.cluster.id # creates dependency on cluster creation
+  source             = "./modules/k8s"
+  prometheus_enabled = var.prometheus_enabled
+  ingress_type       = var.ingress_type
 
   depends_on = [
     module.eks_node_groups
@@ -81,5 +82,10 @@ module "k8s" {
 module "k8s_test_services" {
   count = var.k8s_test_services_enabled ? 1 : 0
 
-  source = "./modules/k8s_test_services"
+  source       = "./modules/k8s_test_services"
+  ingress_type = var.ingress_type
+
+  depends_on = [
+    module.eks_node_groups
+  ]
 }

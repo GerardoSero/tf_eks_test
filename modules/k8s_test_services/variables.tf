@@ -1,8 +1,3 @@
-variable "prometheus_enabled" {
-  type    = bool
-  default = false
-}
-
 variable "ingress_type" {
   type    = string
   default = "nginx"

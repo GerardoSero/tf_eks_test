@@ -1,0 +1,1658 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 25,
+  "iteration": 1619009917454,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "title": "Cluster",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(instance:node_cpu:rate:sum)",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(machine_cpu_cores)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total Cores",
+          "refId": "B"
+        }
+      ],
+      "title": "CPU Usage",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {}
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 3,
+        "y": 1
+      },
+      "id": 14,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)/(1024*1024*1024))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes)/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes)/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(node_memory_MemTotal_bytes)/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "B"
+        }
+      ],
+      "title": "Memory Usage(Gb)",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {}
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 6,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "displayLabels": [
+          "value",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom",
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kube_node_status_capacity_pods) - sum(kube_pod_info)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Available",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind=~\"DaemonSet\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Running",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind!~\"DaemonSet\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "DeamonSet",
+          "refId": "C"
+        }
+      ],
+      "title": "Pods",
+      "type": "piechart"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
+      "id": 26,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\"}[3m])) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage(Top 5)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "id": 34,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(kube_pod_container_resource_requests_cpu_cores) by (pod))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Top CPU Reserved",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 15,
+        "y": 1
+      },
+      "id": 49,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(kube_pod_container_resource_limits_cpu_cores) by (container) * 100 / sum(kube_pod_container_resource_requests_cpu_cores) by (container))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "round(sum(kube_pod_container_resource_limits_cpu_cores) by (container) * 100 / sum(kube_pod_container_resource_requests_cpu_cores) by (container))",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "CPU Limit/Requested",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "id": 62,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\"}[3m])) by (container) * 100 / sum(kube_pod_container_resource_requests_cpu_cores) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage/Requested(Top 5)",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 9,
+      "panels": [],
+      "repeat": "node",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "title": "Node $node",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeat": null,
+      "repeatDirection": "h",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{node=~\"$node\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(machine_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total Cores",
+          "refId": "B"
+        }
+      ],
+      "title": "CPU Usage",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {}
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 4,
+        "y": 10
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(node_memory_MemTotal_bytes{node=~\"$node\"} - node_memory_MemAvailable_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(node_memory_MemTotal_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "B"
+        }
+      ],
+      "title": "Memory Usage(Gb)",
+      "transformations": [],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 8,
+        "y": 10
+      },
+      "id": 20,
+      "options": {
+        "displayLabels": [
+          "value",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom",
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kube_node_status_capacity_pods{node=~\"$node\"}) - sum(kube_pod_info{node=~\"$node\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Available",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind!~\"DaemonSet\", node=~\"$node\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Running",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind=~\"DaemonSet\", node=~\"$node\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "DeamonSets",
+          "refId": "C"
+        }
+      ],
+      "title": "Pods",
+      "type": "piechart"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 11,
+        "y": 10
+      },
+      "id": 27,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\", node=~\"$node\"}[3m])) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage(Top 5)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 15,
+        "y": 10
+      },
+      "id": 35,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) by (pod))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Top CPU Reserved",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 18,
+        "y": 10
+      },
+      "id": 69,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-1-158.ec2.internal",
+          "value": "ip-10-0-1-158.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\",node=~\"$node\"}[3m])) by (container) * 100 / sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage/Requested(Top 5)",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 70,
+      "panels": [],
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 9,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "title": "Node $node",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 19
+      },
+      "id": 71,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeat": null,
+      "repeatDirection": "h",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 10,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{node=~\"$node\"})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(machine_cpu_cores{node=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total Cores",
+          "refId": "B"
+        }
+      ],
+      "title": "CPU Usage",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {}
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 4,
+        "y": 19
+      },
+      "id": 72,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 7,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(node_memory_MemTotal_bytes{node=~\"$node\"} - node_memory_MemAvailable_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Usage",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_requests_memory_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Requested",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_container_resource_limits_memory_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limits",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(node_memory_MemTotal_bytes{node=~\"$node\"})/(1024*1024*1024)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Total",
+          "refId": "B"
+        }
+      ],
+      "title": "Memory Usage(Gb)",
+      "transformations": [],
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 8,
+        "y": 19
+      },
+      "id": 73,
+      "options": {
+        "displayLabels": [
+          "value",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom",
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 20,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kube_node_status_capacity_pods{node=~\"$node\"}) - sum(kube_pod_info{node=~\"$node\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Available",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind!~\"DaemonSet\", node=~\"$node\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Running",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kube_pod_info{created_by_kind=~\"DaemonSet\", node=~\"$node\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "DeamonSets",
+          "refId": "C"
+        }
+      ],
+      "title": "Pods",
+      "type": "piechart"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 11,
+        "y": 19
+      },
+      "id": 74,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 27,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\", node=~\"$node\"}[3m])) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage(Top 5)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 15,
+        "y": 19
+      },
+      "id": 75,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 35,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) by (pod))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Top CPU Reserved",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 18,
+        "y": 19
+      },
+      "id": 76,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "7.5.3",
+      "repeatIteration": 1619009917454,
+      "repeatPanelId": 69,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "node": {
+          "selected": false,
+          "text": "ip-10-0-3-176.ec2.internal",
+          "value": "ip-10-0-3-176.ec2.internal"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\",node=~\"$node\"}[3m])) by (container) * 100 / sum(kube_pod_container_resource_requests_cpu_cores{node=~\"$node\"}) by (container))",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Containers CPU Usage/Requested(Top 5)",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "datasource": null,
+        "definition": "label_values(kube_pod_info, cluster)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_pod_info, cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(kube_pod_info{cluster=\"$cluster\"}, node)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Node",
+        "multi": true,
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_pod_info{cluster=\"$cluster\"}, node)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "New dashboard Copy",
+  "uid": "8Sflq8uMk",
+  "version": 3
+}

@@ -37,3 +37,7 @@ ansible_templates/jenkins_auth
 
 .tmp
 .tmp/*
+
+kubeconfig
+terraform.tfstate
+terraform.tfstate.*

@@ -92,8 +92,8 @@ resource "kubernetes_deployment" "echo" {
 
           resources {
             limits = {
-              memory = "512M"
-              cpu    = "500m"
+              memory = "128M"
+              cpu    = "200m"
             }
             requests = {
               memory = "128M"
@@ -103,6 +103,12 @@ resource "kubernetes_deployment" "echo" {
         }
       }
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      spec[0].replicas
+    ]
   }
 }
 
@@ -125,15 +131,28 @@ resource "kubernetes_horizontal_pod_autoscaler" "echo_hpa" {
     max_replicas = 10
 
     metric {
-      type = "Resource"
-      resource {
-        name = "cpu"
+      type = "Pods"
+      pods {
+        metric {
+          name = "my_record"
+        }
         target {
-          type                = "Utilization"
-          average_utilization = 70
+          type          = "AverageValue"
+          average_value = "900m"
         }
       }
     }
+
+    # metric {
+    #   type = "Resource"
+    #   resource {
+    #     name = "cpu"
+    #     target {
+    #       type                = "Utilization"
+    #       average_utilization = 70
+    #     }
+    #   }
+    # }
   }
 }
 
@@ -157,8 +176,10 @@ resource "kubernetes_service" "echo" {
 }
 
 resource "kubernetes_ingress" "echo_ingress" {
+  count = var.ingress_type == "kong" ? 1 : 0
+
   metadata {
-    name = "echo"
+    name = "echo-kong"
     annotations = {
       "kubernetes.io/ingress.class" = "kong"
       "konghq.com/override"         = "sample-customization"
@@ -180,3 +201,27 @@ resource "kubernetes_ingress" "echo_ingress" {
   }
 }
 
+resource "kubernetes_ingress" "echo_ingress_nginx" {
+  count = var.ingress_type == "nginx" ? 1 : 0
+
+  metadata {
+    name = "echo-nginx"
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+    }
+  }
+
+  spec {
+    rule {
+      http {
+        path {
+          path = "/echo"
+          backend {
+            service_name = "echo"
+            service_port = "80"
+          }
+        }
+      }
+    }
+  }
+}

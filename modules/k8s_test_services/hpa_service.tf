@@ -59,6 +59,12 @@ resource "kubernetes_deployment" "hpa" {
       }
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      spec[0].replicas
+    ]
+  }
 }
 
 resource "kubernetes_horizontal_pod_autoscaler" "hpa_hpa" {
@@ -112,11 +118,39 @@ resource "kubernetes_service" "hpa" {
 }
 
 resource "kubernetes_ingress" "hpa_ingress" {
+  count = var.ingress_type == "kong" ? 1 : 0
+
   metadata {
-    name = "hpa"
+    name = "hpa-kong"
     annotations = {
       "kubernetes.io/ingress.class" = "kong"
       "konghq.com/strip-path"       = "true"
+    }
+  }
+
+  spec {
+    rule {
+      http {
+        path {
+          path = "/hpa"
+          backend {
+            service_name = "hpa"
+            service_port = "80"
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_ingress" "hpa_ingress_nginx" {
+  count = var.ingress_type == "nginx" ? 1 : 0
+
+  metadata {
+    name = "hpa-nginx"
+    annotations = {
+      "kubernetes.io/ingress.class"                = "nginx"
+      "nginx.ingress.kubernetes.io/rewrite-target" = "/"
     }
   }
 

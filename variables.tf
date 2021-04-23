@@ -28,6 +28,16 @@ variable "k8s_test_services_enabled" {
   default = false
 }
 
+variable "prometheus_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "ingress_type" {
+  type    = string
+  default = "nginx"
+}
+
 variable "admin_access_cidr" {
   type = string
 }

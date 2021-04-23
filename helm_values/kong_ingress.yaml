@@ -10,6 +10,7 @@ proxy:
     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
     service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+    #service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
 
 # Kong Ingress Controller's primary purpose is to satisfy Ingress resources
 # created in k8s.  It uses CRDs for more fine grained control over routing and
@@ -21,15 +22,19 @@ ingressController:
       cpu: "10m"
       memory: "50Mi"
     requests:
-      cpu: "5m"
-      memory: "10Mi"
+      cpu: "10m"
+      memory: "50Mi"
+
+podAnnotations:
+  prometheus.io/scrape: "true" # Ask Prometheus to scrape the
+  prometheus.io/port: "8001"   # Kong pods for metrics
 
 resources:
   limits:
-   cpu: "500m"
+   cpu: "350m"
    memory: "500Mi"
   requests:
-   cpu: "500m"
+   cpu: "350m"
    memory: "256Mi"
 
 affinity:
@@ -66,3 +71,18 @@ admin:
   enabled: true
   http:
     enabled: true
+
+# Custom Kong plugins can be loaded into Kong by mounting the plugin code
+# into the file-system of Kong container.
+# The plugin code should be present in ConfigMap or Secret inside the same
+# namespace as Kong is being installed.
+# The `name` property refers to the name of the ConfigMap or Secret
+# itself, while the pluginName refers to the name of the plugin as it appears
+# in Kong.
+# Subdirectories (which are optional) require separate ConfigMaps/Secrets.
+# "path" indicates their directory under the main plugin directory: the example
+# below will mount the contents of kong-plugin-rewriter-migrations at "/opt/kong/rewriter/migrations".
+# plugins:
+#   configMaps:
+#   - name: kong-prometheus-plugin
+#     pluginName: prometheus
