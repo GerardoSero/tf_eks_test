@@ -45,11 +45,10 @@ resource "aws_security_group" "eks_node_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = map(
-    "Name", "${var.cluster_name}-node-sg",
-    "kubernetes.io/cluster/${var.cluster_name}", "owned"
-  )
-
+  tags = tomap({
+    "Name" = "${var.cluster_name}-node-sg",
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+  })
 }
 
 resource "aws_security_group_rule" "eks_node_sg-ingress-self" {

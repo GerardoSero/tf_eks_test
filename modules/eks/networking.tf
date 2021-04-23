@@ -5,11 +5,11 @@ data "aws_availability_zones" "available" {}
 resource "aws_vpc" "eks_vpc" {
   cidr_block = "10.0.0.0/16"
 
-  tags = map(
-    "Name", "${var.cluster_name}-vpc",
-    "Cluster", var.cluster_name,
-    "kubernetes.io/cluster/${var.cluster_name}", "shared",
-  )
+  tags = tomap({
+    "Name"                                      = "${var.cluster_name}-vpc",
+    "Cluster"                                   = var.cluster_name,
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared",
+  })
 }
 
 resource "aws_subnet" "eks_subnet" {
@@ -21,11 +21,11 @@ resource "aws_subnet" "eks_subnet" {
   # Required in public subnets by EKS. https://aws.amazon.com/blogs/containers/upcoming-changes-to-ip-assignment-for-eks-managed-node-groups/
   map_public_ip_on_launch = true
 
-  tags = map(
-    "Name", "${var.cluster_name}-subnet-${data.aws_availability_zones.available.names[count.index]}",
-    "Cluster", var.cluster_name,
-    "kubernetes.io/cluster/${var.cluster_name}", "shared",
-  )
+  tags = tomap({
+    "Name"                                      = "${var.cluster_name}-subnet-${data.aws_availability_zones.available.names[count.index]}",
+    "Cluster"                                   = var.cluster_name,
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+  })
 }
 
 resource "aws_internet_gateway" "eks_igw" {
