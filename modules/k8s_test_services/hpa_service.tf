@@ -117,45 +117,30 @@ resource "kubernetes_service" "hpa" {
   }
 }
 
-resource "kubernetes_ingress" "hpa_ingress" {
-  count = var.ingress_type == "kong" ? 1 : 0
-
-  metadata {
-    name = "hpa-kong"
-    annotations = {
+locals {
+  hpa_ingress_annotations = {
+    kong = {
       "kubernetes.io/ingress.class" = "kong"
       "konghq.com/strip-path"       = "true"
     }
-  }
-
-  spec {
-    rule {
-      http {
-        path {
-          path = "/hpa"
-          backend {
-            service_name = "hpa"
-            service_port = "80"
-          }
-        }
-      }
-    }
-  }
-}
-
-resource "kubernetes_ingress" "hpa_ingress_nginx" {
-  count = var.ingress_type == "nginx" ? 1 : 0
-
-  metadata {
-    name = "hpa-nginx"
-    annotations = {
+    nginx = {
       "kubernetes.io/ingress.class"                = "nginx"
       "nginx.ingress.kubernetes.io/rewrite-target" = "/"
     }
   }
+}
+
+resource "kubernetes_ingress" "hpa_ingress" {
+  count = var.ingress_type != "none" ? 1 : 0
+
+  metadata {
+    name        = "hpa"
+    annotations = local.hpa_ingress_annotations[var.ingress_type]
+  }
 
   spec {
     rule {
+      host = var.public_domain
       http {
         path {
           path = "/hpa"

@@ -14,6 +14,21 @@ resource "helm_release" "prometheus" {
   namespace  = kubernetes_namespace.prometheus[0].metadata.0.name
 
   values = [file("./helm_values/prometheus_stack.yaml")]
+
+  set {
+    name  = "grafana.ingress.enabled"
+    value = var.ingress_type != "none"
+  }
+
+  set {
+    name  = "grafana.ingress.annotations.kubernetes\\.io/ingress\\.class"
+    value = var.ingress_type
+  }
+
+  set {
+    name  = "grafana.ingress.hosts[0]"
+    value = var.grafana_host
+  }
 }
 
 resource "helm_release" "prometheus_adapter" {

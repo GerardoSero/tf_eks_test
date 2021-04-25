@@ -1,6 +1,4 @@
 resource "kubernetes_namespace" "ingress" {
-  count = var.ingress_type == "none" ? 0 : 1
-
   metadata {
     name = "ingress"
   }
@@ -12,7 +10,7 @@ resource "helm_release" "kong_ingress" {
   name       = "kong-ingress"
   repository = "https://charts.konghq.com"
   chart      = "kong"
-  namespace  = kubernetes_namespace.ingress[0].metadata.0.name
+  namespace  = kubernetes_namespace.ingress.metadata.0.name
 
   set {
     name  = "ingressController.installCRDs"
@@ -28,7 +26,7 @@ resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
-  namespace  = kubernetes_namespace.ingress[0].metadata.0.name
+  namespace  = kubernetes_namespace.ingress.metadata.0.name
 
   values = [file("./helm_values/nginx_ingress.yaml")]
 }

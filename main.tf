@@ -72,11 +72,16 @@ module "eks_cloudwatch" {
 module "eks_ingress" {
   count = var.ingress_type != "none" ? 1 : 0
 
-  source            = "./modules/eks_ingress"
-  cluster_name      = module.eks.cluster.id
-  cluster_region    = var.aws_region
-  oidc_provider_url = module.eks.oidc_provider_url
-  oidc_provider_arn = module.eks.oidc_provider_arn
+  source               = "./modules/eks_ingress"
+  ingress_type         = var.ingress_type
+  external_dns_enabled = var.ingress_external_dns_enabled
+  external_dns = {
+    cluster_name      = module.eks.cluster.id
+    cluster_region    = var.aws_region
+    oidc_provider_url = module.eks.oidc_provider_url
+    oidc_provider_arn = module.eks.oidc_provider_arn
+    public_domain     = var.public_domain
+  }
 
   depends_on = [
     module.eks_node_groups
@@ -87,6 +92,7 @@ module "k8s" {
   source             = "./modules/k8s"
   prometheus_enabled = var.prometheus_enabled
   ingress_type       = var.ingress_type
+  grafana_host       = "grafana.${var.public_domain}"
 
   depends_on = [
     module.eks_node_groups
@@ -96,8 +102,9 @@ module "k8s" {
 module "k8s_test_services" {
   count = var.k8s_test_services_enabled ? 1 : 0
 
-  source       = "./modules/k8s_test_services"
-  ingress_type = var.ingress_type
+  source        = "./modules/k8s_test_services"
+  ingress_type  = var.ingress_type
+  public_domain = var.public_domain
 
   depends_on = [
     module.eks_node_groups

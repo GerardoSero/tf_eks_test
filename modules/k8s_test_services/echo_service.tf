@@ -175,44 +175,28 @@ resource "kubernetes_service" "echo" {
   }
 }
 
-resource "kubernetes_ingress" "echo_ingress" {
-  count = var.ingress_type == "kong" ? 1 : 0
-
-  metadata {
-    name = "echo-kong"
-    annotations = {
+locals {
+  echo_ingress_annotations = {
+    kong = {
       "kubernetes.io/ingress.class" = "kong"
-      "konghq.com/override"         = "sample-customization"
     }
-  }
-
-  spec {
-    rule {
-      http {
-        path {
-          path = "/echo"
-          backend {
-            service_name = "echo"
-            service_port = "80"
-          }
-        }
-      }
+    nginx = {
+      "kubernetes.io/ingress.class" = "nginx"
     }
   }
 }
 
-resource "kubernetes_ingress" "echo_ingress_nginx" {
-  count = var.ingress_type == "nginx" ? 1 : 0
+resource "kubernetes_ingress" "echo_ingress" {
+  count = var.ingress_type != "none" ? 1 : 0
 
   metadata {
-    name = "echo-nginx"
-    annotations = {
-      "kubernetes.io/ingress.class" = "nginx"
-    }
+    name        = "echo"
+    annotations = local.echo_ingress_annotations[var.ingress_type]
   }
 
   spec {
     rule {
+      host = var.public_domain
       http {
         path {
           path = "/echo"

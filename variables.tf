@@ -38,6 +38,16 @@ variable "ingress_type" {
   default = "nginx"
 }
 
+variable "ingress_external_dns_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "admin_access_cidr" {
   type = string
+}
+
+variable "public_domain" {
+  type    = string
+  default = "example.com"
 }

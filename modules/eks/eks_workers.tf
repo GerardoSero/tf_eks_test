@@ -46,7 +46,7 @@ resource "aws_security_group" "eks_node_sg" {
   }
 
   tags = tomap({
-    "Name" = "${var.cluster_name}-node-sg",
+    "Name"                                      = "${var.cluster_name}-node-sg",
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   })
 }

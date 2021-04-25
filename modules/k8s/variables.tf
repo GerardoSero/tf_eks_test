@@ -3,6 +3,11 @@ variable "prometheus_enabled" {
   default = false
 }
 
+variable "grafana_host" {
+  type    = string
+  default = "grafana.example.com"
+}
+
 variable "ingress_type" {
   type    = string
   default = "nginx"

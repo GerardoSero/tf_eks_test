@@ -6,3 +6,7 @@ variable "ingress_type" {
     error_message = "The ingress type parameter has an unknow value."
   }
 }
+
+variable "public_domain" {
+  type = string
+}
