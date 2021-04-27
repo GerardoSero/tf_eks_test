@@ -18,7 +18,7 @@ variable "external_dns" {
     cluster_region    = string
     oidc_provider_url = string
     oidc_provider_arn = string
-    public_domain     = string
+    dns_zones         = list(string)
   })
 }
 

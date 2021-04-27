@@ -43,6 +43,8 @@ module "eks_node_groups" {
 }
 
 module "eks_autoscaling" {
+  count = var.eks_autoscaling_enabled ? 1 : 0
+
   source            = "./modules/eks_autoscaling"
   cluster_name      = module.eks.cluster.id
   cluster_region    = var.aws_region
@@ -80,7 +82,7 @@ module "eks_ingress" {
     cluster_region    = var.aws_region
     oidc_provider_url = module.eks.oidc_provider_url
     oidc_provider_arn = module.eks.oidc_provider_arn
-    public_domain     = var.public_domain
+    dns_zones         = tolist(["test.${var.public_domain}"])
   }
 
   depends_on = [
@@ -92,7 +94,7 @@ module "k8s" {
   source             = "./modules/k8s"
   prometheus_enabled = var.prometheus_enabled
   ingress_type       = var.ingress_type
-  grafana_host       = "grafana.${var.public_domain}"
+  grafana_host       = "grafana.test.${var.public_domain}"
 
   depends_on = [
     module.eks_node_groups
@@ -104,7 +106,7 @@ module "k8s_test_services" {
 
   source        = "./modules/k8s_test_services"
   ingress_type  = var.ingress_type
-  public_domain = var.public_domain
+  public_domain = "test.${var.public_domain}"
 
   depends_on = [
     module.eks_node_groups

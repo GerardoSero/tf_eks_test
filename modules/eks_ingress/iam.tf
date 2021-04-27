@@ -1,9 +1,9 @@
 resource "aws_iam_policy" "eks_externaldns_policy" {
   count = var.external_dns_enabled ? 1 : 0
 
-  name        = "${var.external_dns.cluster_name}-cloudwatch"
+  name        = "${var.external_dns.cluster_name}-externaldns"
   path        = "/"
-  description = "CloudWatch Policy for ${var.external_dns.cluster_name}"
+  description = "ExternalDns/Route53 Policy for ${var.external_dns.cluster_name}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",

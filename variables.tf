@@ -13,6 +13,11 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "eks_autoscaling_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "eks_cloudwatch_enabled" {
   type    = bool
   default = false
